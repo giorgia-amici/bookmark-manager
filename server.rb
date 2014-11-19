@@ -1,11 +1,15 @@
 require 'sinatra/base'
 require 'data_mapper'
+require 'rack-flash'
+require_relative 'helpers/application'
+require_relative 'data_mapper_setup'
 
 env = ENV['RACK_ENV'] || 'development'
 DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 
 require './lib/link'
 require './lib/tag'
+require './lib/user'
 
 DataMapper.finalize
 DataMapper.auto_upgrade!
@@ -13,6 +17,9 @@ DataMapper.auto_upgrade!
 class Bookmark < Sinatra::Base
 
 set :views, Proc.new{ File.join(root,"views") }
+enable :sessions
+set :session_secret, 'my unique encryption key!'
+use Rack::Flash
 
   get '/' do
   	@links = Link.all
@@ -32,6 +39,27 @@ set :views, Proc.new{ File.join(root,"views") }
   	@links = tag ? tag.links : []
   	erb :index
   end
+
+  get '/users/new' do
+  	@user = User.new
+  	erb :"users/new"
+  end
+
+  post '/users' do
+  	@user = User.new(:email => params[:email],
+  							:password => params[:password],
+  							:password_confirmation => params[:password_confirmation])
+  	if @user.save
+  		session[:user_id] = @user.id 
+  		redirect to('/')
+  	else
+  		flash.now[:errors] = @user.errors.full_messages
+  	end
+  end
+
+
+
+
 
 
 
