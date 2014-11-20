@@ -2,12 +2,9 @@ class User
 	require 'bcrypt'
 	include DataMapper::Resource
 
-
-	property :id, Serial
-	property :email, String, :unique => true, :message => "This email is already taken"
-	property :password_digest, Text
-
-
+	property :id,                   Serial
+	property :email,                String, :unique => true, :message => "This email is already taken"
+	property :password_digest,      Text
 
 	attr_reader :password
   attr_accessor :password_confirmation
@@ -19,5 +16,8 @@ class User
     @password = password
     self.password_digest = BCrypt::Password.create(password)
   end
+
+
+  
 
 end

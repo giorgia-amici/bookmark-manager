@@ -8,7 +8,7 @@ DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 require './lib/link'
 require './lib/tag'
 require './lib/user'
-#require_relative 'helpers/application'
+# require_relative 'helper/application'
 require_relative 'data_mapper_setup'
 
 DataMapper.finalize
@@ -17,6 +17,7 @@ DataMapper.auto_upgrade!
 class Bookmark < Sinatra::Base
 
 set :views, Proc.new{ File.join(root,"views") }
+set :public, Proc.new{ File.join(root, "public") }
 enable :sessions
 set :session_secret, 'my unique encryption key!'
 use Rack::Flash
@@ -50,26 +51,31 @@ use Rack::Flash
   							:password => params[:password],
   							:password_confirmation => params[:password_confirmation])
   	if @user.save
-  		session[:user_id] = @user.id 
+  		session[:user_id] = @user.id
   		redirect to('/')
   	else
-  		flash.now[:errors] = @user.errors.full_messages
+  		flash[:errors] = @user.errors.full_messages
   		erb :"users/new"
   	end
   end
+  # This is a fairly common pattern of handling potential errors. Instead of
+  #  creating the object straight away,
+  #  you initialise it, attempt to save and handle both possibilities
+
+
+
+
+
+ def current_user    
+    @current_user ||= User.get(session[:user_id]) if session[:user_id]
+ end
 
 
 
 
 
 
-
-
-
-
-
-
-
+#which is the difference between flash notice and flash error?
 
 
 

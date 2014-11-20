@@ -3,7 +3,7 @@ require './server'
 require 'database_cleaner'
 require 'capybara/rspec'
 
-Capybara.app = Bookmark
+Capybara.app = Bookmark.new
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
