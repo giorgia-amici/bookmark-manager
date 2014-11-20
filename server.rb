@@ -1,8 +1,6 @@
 require 'sinatra/base'
 require 'data_mapper'
 require 'rack-flash'
-require_relative 'helpers/application'
-require_relative 'data_mapper_setup'
 
 env = ENV['RACK_ENV'] || 'development'
 DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
@@ -10,6 +8,8 @@ DataMapper.setup(:default, "postgres://localhost/bookmark_manager_#{env}")
 require './lib/link'
 require './lib/tag'
 require './lib/user'
+#require_relative 'helpers/application'
+require_relative 'data_mapper_setup'
 
 DataMapper.finalize
 DataMapper.auto_upgrade!
@@ -54,6 +54,7 @@ use Rack::Flash
   		redirect to('/')
   	else
   		flash.now[:errors] = @user.errors.full_messages
+  		erb :"users/new"
   	end
   end
 
