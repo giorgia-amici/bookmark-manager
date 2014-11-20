@@ -58,9 +58,6 @@ use Rack::Flash
   		erb :"users/new"
   	end
   end
-  # This is a fairly common pattern of handling potential errors. Instead of
-  #  creating the object straight away,
-  #  you initialise it, attempt to save and handle both possibilities
 
 get '/sessions/new' do
 	erb :"sessions/new"
@@ -68,9 +65,9 @@ end
 
 post '/sessions' do
 	email, password = params[:email], params[:password]
-	user = User.authenticate(email, password)
-	if user
-		session[:user_id] = user_id
+	@user = User.authenticate(email, password)
+	if @user
+		session[:user_id] = @user_id
 		redirect to ('/')
 	else
 		flash[:errors] = ["The email or password is incorrect"]

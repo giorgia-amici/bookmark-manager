@@ -23,23 +23,13 @@ scenario "with incorrect credentials" do
 end
 
 def sign_in(email, password)
-	visit '/session.new'
+	visit '/sessions/new'
 	fill_in 'email', :with => email
 	fill_in 'password', :with => password
-	click_button 'Sign in'
+	click_button 'Sign In'
 end
 
-
-
-
-
-
-
-
-
-
-
-
+end
 
 
 feature "User signs up" do
@@ -74,11 +64,6 @@ def sign_up(email = "gio@linda.com", password = "oranges!", password_confirmatio
     fill_in :password_confirmation, :with => password_confirmation
     click_button "Sign Up"
 end
-
-
-
-
-
 
 
 
