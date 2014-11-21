@@ -65,6 +65,8 @@ def sign_up(email = "gio@linda.com", password = "oranges!", password_confirmatio
     click_button "Sign Up"
 end
 
+end
+
 feature 'User signs out' do
 
 before(:each) do
@@ -82,14 +84,14 @@ end
 
 
 
-
+def sign_in(email, password)
+	visit '/sessions/new'
+	fill_in 'email', :with => email
+	fill_in 'password', :with => password
+	click_button 'Sign In'
+end
 
 end
 
 
 
-
-
-
-
-end
